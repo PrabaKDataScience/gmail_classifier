@@ -3,9 +3,11 @@ name = "gmail-classifier"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi>=0.141.1",
     "google-api-python-client>=2.200.0",
     "google-auth-httplib2>=0.4.2",
     "google-auth-oauthlib>=1.4.1",
     "python-dotenv>=1.2.3",
     "typesafe-sdk>=0.7.2",
+    "uvicorn>=0.54.0",
 ]

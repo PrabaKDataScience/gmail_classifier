@@ -1,81 +1,91 @@
-# Gmail AI Classifier 🤖📧
+# Gmail Classification Using Jev ⚡📧
 
-An intelligent email automation tool that leverages the Gmail API and the **TypeSafe SDK** (Codiv AI) to automatically categorize, label, and archive incoming emails. Keep your inbox zeroed out by routing emails into smart categories like Banking, E-commerce, Recruitment, and Tech Community without manual intervention.
+![Dashboard UI](./dashboard_snapshot.png)
+
+An intelligent, full-stack email automation tool that leverages the Gmail API and the **TypeSafe SDK** (Codiv AI) to automatically categorize, label, and archive incoming emails. Keep your inbox zeroed out by routing emails into smart categories with zero manual intervention.
 
 ---
 
 ## 🌟 Features
 
-- **Automated Pulling**: Securely connects to your Gmail INBOX and fetches unread/unprocessed messages.
-- **System One AI**: Utilizes the "System One"   architecture—a fast, non-generative (not LLM) classification approach. Instead of relying on a slow, expensive LLM that generates token-by-token, it acts as a high-speed router to instantly categorize text.
-- **OpenJev Model**: Powered by `openjev-latest`, an optimized classification model designed for zero-shot semantic routing with milliseconds latency.
-- **Auto-Labeling & Archiving**: Dynamically creates required Gmail labels (if they don't exist), applies them to the email thread, and archives the message out of your INBOX.
-- **Type-Safe Parsing**: Enforces strict category structures using the TypeSafe framework to prevent hallucinated labels and ensure output predictability.
+- **Hyper-Fast System One AI**: Utilizes TypeSafe's "System One" architecture powered by the `openjev-latest` model. This is a non-generative semantic routing approach that classifies emails instantly with near-zero latency, saving massive LLM token costs.
+- **Premium Dashboard UI**: A state-of-the-art, glassmorphism-inspired React web application. Features dynamic micro-animations, a clean two-column layout, and a gorgeous real-time progress tracker.
+- **Real-Time Cost Tracking**: Monitors exact token usage and dynamically calculates estimated financial cost for transparency.
+- **Progress & ETA Engine**: While processing bulk batches of emails, the dashboard provides a live, calculated ETA (Estimated Time of Arrival) so you know exactly how long the task will take.
+- **Dynamic Category Training**: Add new custom categories and descriptions directly from the UI to teach the AI how to handle niche email subjects.
+- **Persistent State**: Maintains a live count of all emails categorized across sessions using robust local file state and professional standard rotating logs.
+- **Auto-Labeling & Archiving**: The backend dynamically creates Gmail labels and archives messages straight out of your inbox in the background.
 
 ## 🛠 Project Structure
 
 ```text
-├── classify_mails.py       # Main entry point for pulling, classifying, and labeling emails
-├── pull_emails.py          # Gmail API integration for fetching and parsing email bodies
-├── label_emails.py         # Gmail API integration for applying labels and modifying threads
-├── first_try.py            # Sandbox script demonstrating TypeSafe SDK capabilities
-├── GMAIL_API_SETUP.md      # Documentation for Google Cloud / OAuth setup
-├── TYPESAFE_API_SETUP.md   # Documentation for Codiv API key generation
-├── pyproject.toml          # uv project configuration and dependencies
-└── uv.lock                 # Strict dependency lockfile
+├── frontend/                 # Vite + React UI Dashboard
+│   ├── src/App.jsx           # Core SaaS layout and classification logic
+│   └── src/App.css           # Premium glassmorphism & gradients styling
+├── main.py                   # FastAPI robust backend server
+├── classify_mails.py         # Core TypeSafe System One integration
+├── pull_emails.py            # Gmail API OAuth and fetching logic
+├── label_emails.py           # Gmail API labeling and archiving
+├── logger.py                 # Enterprise-grade rotating file logger
+├── state.json                # Persistent data store for dashboard metrics
+├── GMAIL_API_SETUP.md        # Documentation for Google Cloud / OAuth setup
+├── TYPESAFE_API_SETUP.md     # Documentation for Codiv API key generation
+└── RUN_WEBAPP.md             # Guide on booting the full-stack system
 ```
 
 ## 📋 Prerequisites
 
-- **Python 3.12+**
-- **uv**: Lightning-fast Python package installer and resolver.
+- **Python 3.12+** and **Node.js**
+- **uv**: Lightning-fast Python package installer.
+- **pnpm**: Fast, disk space efficient package manager for Node.js.
 - **Google Cloud Console Account**: For generating Gmail API OAuth credentials.
 - **Codiv AI Account**: For generating the `TYPESAFE_API_KEY`.
 
 ## 🚀 Installation & Setup
 
-1. **Clone the repository** (if applicable) and navigate to the project directory:
-   ```bash
-   cd gmail_classifier
-   ```
-
-2. **Install dependencies** using `uv`:
+1. **Clone the repository** and install Python dependencies:
    ```bash
    uv sync
    ```
-   *(This will automatically create a `.venv` and install all required packages).*
+
+2. **Install Frontend dependencies**:
+   ```bash
+   cd frontend
+   npx pnpm install
+   cd ..
+   ```
 
 ## ⚙️ Configuration
 
-### 1. Gmail API Credentials
-You need a `credentials.json` file to authenticate with Google. 
-- Please refer to [GMAIL_API_SETUP.md](./GMAIL_API_SETUP.md) for detailed step-by-step instructions.
-- Upon first execution, a browser window will prompt you to authorize the app. A `token.json` file will then be generated to maintain your session.
+1. **Gmail API**: Place your `credentials.json` in the root folder. (See [GMAIL_API_SETUP.md](./GMAIL_API_SETUP.md)).
+2. **TypeSafe API**: Create a `.env` file in the root folder:
+   ```env
+   TYPESAFE_API_KEY="sk-codiv-YOUR_API_KEY"
+   TYPESAFE_BASE_URL="https://api.codiv.ai"
+   ```
 
-### 2. TypeSafe API Settings
-Create a `.env` file in the root of the project with your Codiv AI credentials:
-- Please refer to [TYPESAFE_API_SETUP.md](./TYPESAFE_API_SETUP.md) for instructions on generating your key.
-```env
-TYPESAFE_API_KEY="sk-codiv-YOUR_API_KEY"
-TYPESAFE_BASE_URL="https://api.codiv.ai"
-```
+## 💻 Running the Web App
 
-## 💻 Usage
+To launch the full-stack classification dashboard, you need to run both the backend API and the frontend UI.
 
-To run the classifier pipeline and process your recent emails:
-
+**1. Start the Backend API (FastAPI)**
 ```bash
-uv run classify_mails.py
+uv run uvicorn main:app --reload
 ```
 
-**Workflow:**
-1. Connects to your Gmail inbox and pulls the latest emails lacking the `processed` label.
-2. Truncates and cleans the email body for efficient AI processing.
-3. Sends the email text to the Codiv AI model for classification.
-4. Identifies the predicted category (e.g., *Banking*, *E-commerce*).
-5. Applies the respective category label and a `processed` label to the entire email thread.
-6. Removes the thread from your `INBOX`.
+**2. Start the Frontend UI (Vite)**
+In a new terminal window:
+```bash
+cd frontend
+npm run dev
+```
 
-## 🛡️ Security Note
+Open `http://localhost:5173` in your browser. Select your batch size using the sleek chips, click the **⚡ CLASSIFY EMAILS ⚡** mega button, and watch your inbox get automatically organized!
 
-This repository contains `.gitignore` rules to prevent the accidental upload of `.env`, `credentials.json`, `token.json`, and `.venv`. Never commit your private API keys or OAuth tokens to version control.
+## 📜 Credits & License
+This project would be impossible without the incredible support and technology from:
+- [**Codiv AI (TypeSafe SDK)**](https://codiv.ai): The backbone of our lightning-fast System One routing architecture.
+- **OpenJev**: For providing the optimized, zero-shot semantic classification model.
+- **Antigravity Google**: For continuously supporting and enabling the development of this project.
+
+Released under the MIT License.
