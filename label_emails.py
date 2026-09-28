@@ -48,12 +48,20 @@ def apply_labels_to_email(service, message_id, category):
         return
         
     try:
-        # Apply the labels to the email and remove it from the INBOX
+        # First, fetch the message to get its threadId
+        msg = service.users().messages().get(userId='me', id=message_id, format='minimal').execute()
+        thread_id = msg.get('threadId')
+        
+        # Apply the labels to the thread and remove it from the INBOX
         body = {
             'addLabelIds': label_ids_to_add,
             'removeLabelIds': ['INBOX']
         }
-        service.users().messages().modify(userId='me', id=message_id, body=body).execute()
+        if thread_id:
+            service.users().threads().modify(userId='me', id=thread_id, body=body).execute()
+        else:
+            service.users().messages().modify(userId='me', id=message_id, body=body).execute()
+            
         print(f"Successfully applied labels {label_names} and removed message from INBOX.")
     except HttpError as error:
         print(f'An error occurred while applying labels: {error}')
