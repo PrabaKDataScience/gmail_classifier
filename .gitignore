@@ -8,6 +8,11 @@ ENV/
 .env
 credentials.json
 token.json
+state.json
+
+# Local State & Logs
+app.log
+app.log.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
