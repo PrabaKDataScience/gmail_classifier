@@ -7,8 +7,8 @@ An intelligent email automation tool that leverages the Gmail API and the **Type
 ## 🌟 Features
 
 - **Automated Pulling**: Securely connects to your Gmail INBOX and fetches unread/unprocessed messages.
-- **Cognitive Architecture (System One)**: Utilizes the `client.system_one()` method to perform rapid, intuitive classification, simulating human fast-thinking.
-- **OpenJev Model**: Powered by `openjev-latest`, an advanced model optimized for high-speed, accurate semantic routing and decision making.
+- **System One AI**: Utilizes the "System One"   architecture—a fast, non-generative (not LLM) classification approach. Instead of relying on a slow, expensive LLM that generates token-by-token, it acts as a high-speed router to instantly categorize text.
+- **OpenJev Model**: Powered by `openjev-latest`, an optimized classification model designed for zero-shot semantic routing with milliseconds latency.
 - **Auto-Labeling & Archiving**: Dynamically creates required Gmail labels (if they don't exist), applies them to the email thread, and archives the message out of your INBOX.
 - **Type-Safe Parsing**: Enforces strict category structures using the TypeSafe framework to prevent hallucinated labels and ensure output predictability.
 
